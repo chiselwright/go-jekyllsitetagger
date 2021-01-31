@@ -99,11 +99,15 @@ func FindTags(path string) ([]string, error) {
 // ParseTagLine takes a string of "tags: t1 t2 t2" and returns a slice of the
 // parsed tags
 func ParseTagLine(tagLine string) []string {
+	// remove duplicate whitecpace
+	space := regexp.MustCompile(`\s+`)
+	tagLine = space.ReplaceAllString(tagLine, " ")
+
 	// if we split the line as whitespace we get our tags
 	// nothing complicated about the parsing in our simple little world
 	split := strings.Split(tagLine, " ")
 	// the first element should be tags: which we don't care about
-	return split[1:]
+	return Unique(split[1:])
 }
 
 // GenerateTagFiles takes a "post" directory to scan, and outputs tag files into
